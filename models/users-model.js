@@ -1,26 +1,18 @@
 const mongoose = require("mongoose");
-const passportLocalMongoose = require('passport-local-mongoose');
-const findOrCreate = require('mongoose-findorcreate');
+const passportLocalMongoose = require("passport-local-mongoose");
+const findOrCreate = require("mongoose-findorcreate");
 
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-  email: {
+  username: { 
     type: String,
     required: true,
   },
-  password: {
+  googleId: {
     type: String,
     required: true,
   },
-  googleId:{
-    type: String,
-    required: true,
-  },
-  secret: {
-    type: String,
-    required: true,
-  }
 });
 
 UserSchema.plugin(passportLocalMongoose);

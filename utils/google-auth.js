@@ -19,4 +19,4 @@ passport.deserializeUser(function (user, cb) {
   });
 });
 
-module.exports = passport;
+module.exports = { passport, User };
