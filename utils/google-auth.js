@@ -1,22 +1,31 @@
 const passport = require("passport");
-
-// Configuración de autenticación de Google
+const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const User = require("../models/users-model");
 
-// Creamos estrategia a partir del modelo
-passport.use(User.createStrategy());
+require("dotenv").config();
 
-// serializar - deserializar /////////////////
-passport.serializeUser(function (user, cb) {
-  process.nextTick(function () {
-    cb(null, { id: user.id });
-  });
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: "http://localhost:4000/auth/google/callback",
+      passReqToCallback: true,
+    },
+    function (request, accessToken, refreshToken, profile, done) {
+      User.findOrCreate(
+        { googleId: profile.id },
+        { username: profile.displayName }
+      );
+      return done(null, profile);
+    }
+  )
+);
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
 });
 
-passport.deserializeUser(function (user, cb) {
-  process.nextTick(function () {
-    return cb(null, user);
-  });
+passport.deserializeUser(function (user, done) {
+  done(null, user);
 });
-
-module.exports = { passport, User };
