@@ -7,12 +7,12 @@ function isLoggedIn(req, res, next) {
 }
 
 router.get(
-  "/auth/google",
+  "/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
 router.get(
-  "/auth/google/callback",
+  "/google/callback",
   passport.authenticate("google", {
     successRedirect: "http://localhost:3000/dashboard",
     failureRedirect: "/auth/google/failure",
@@ -30,7 +30,7 @@ router.get("/logout", (req, res) => {
   res.send("Goodbye!");
 });
 
-router.get("/auth/google/failure", (req, res) => {
+router.get("/google/failure", (req, res) => {
   res.send("Failed to authenticate..");
 });
 

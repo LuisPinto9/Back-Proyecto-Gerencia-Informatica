@@ -19,7 +19,7 @@ app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/", require("./routes/login"));
+app.use("/auth", require("./routes/login"));
 
 app.use("/", (req, res) =>
   res.send("API del proyecto de Gerencia Informática")
