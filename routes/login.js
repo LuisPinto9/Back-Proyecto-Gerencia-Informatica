@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const passport = require("passport");
+const jwtUtils = require("../utils/jwt");
 
 require("../utils/google-auth");
 
@@ -15,14 +16,14 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "http://localhost:3000/dashboard",
+    successRedirect: "/auth/google/success",
     failureRedirect: "/auth/google/failure",
   })
 );
 
-router.get("/protected", isLoggedIn, (req, res) => {
-  console.log(req);
-  res.send(`Hello ${req.user.displayName}`);
+router.get("/google/success", isLoggedIn, (req, res) => {
+  const token = jwtUtils.createToken(req.user);
+  res.redirect(`http://localhost:3000/dashboard?token=${token}`);
 });
 
 router.get("/logout", (req, res) => {
@@ -32,7 +33,7 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/google/failure", (req, res) => {
-  res.send("Failed to authenticate..");
+  res.redirect("http://localhost:3000/");
 });
 
 module.exports = router;
