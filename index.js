@@ -20,6 +20,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", require("./routes/login"));
+app.use("/api/posts", require("./routes/posts"));
+app.use("/api/users", require("./routes/users"));
 
 app.use("/", (req, res) =>
   res.send("API del proyecto de Gerencia Informática")

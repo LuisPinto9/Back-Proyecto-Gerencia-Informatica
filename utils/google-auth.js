@@ -1,6 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
-const User = require("../models/users-model");
+const User = require("../models/user-model");
 
 require("dotenv").config();
 
@@ -15,7 +15,11 @@ passport.use(
     function (request, accessToken, refreshToken, profile, done) {
       User.findOrCreate(
         { googleId: profile.id },
-        { username: profile.displayName }
+        {
+          username: profile.displayName,
+          email: profile.email,
+          profilePicture: profile.picture,
+        }
       );
       return done(null, profile);
     }
