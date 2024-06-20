@@ -5,7 +5,7 @@ const {
   getPost,
   likePost,
   timeline,
-  updatePost,
+  updatePost,findusername,
 } = require("../controllers/posts-controller");
 
 router.post("/",createPost);
@@ -14,5 +14,7 @@ router.delete("/:id",deletePost);
 router.put("/:id/like",likePost);
 router.get("/:id",getPost);
 router.get("/timeline/:userId",timeline);
+router.get("/profile/:username",findusername);
+
 
 module.exports = router;

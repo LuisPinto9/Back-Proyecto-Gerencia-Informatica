@@ -3,7 +3,8 @@ const {deleteUser,followUser,getUser,unfollowUser,updateUser} = require("../cont
 
 router.put("/:id",updateUser);
 router.delete("/:id",deleteUser);
-router.get("/:id",getUser);
+// router.get("/:id",getUser);
+router.get("/",getUser);
 router.put("/:id/follow",followUser);
 router.put("/:id/unfollow",unfollowUser);
 
