@@ -72,18 +72,54 @@ exports.getPost = async (req, res) => {
 exports.timeline = async (req, res) => {
   try {
     const currentUser = await User.findById(req.params.userId);
-    console.log(req.params.userId)
+    
+    if (!currentUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     const userPosts = await Post.find({ userId: currentUser._id });
     const friendPosts = await Promise.all(
-      currentUser.followings.map((friendId) => {
-        return Post.find({ userId: friendId });
+      currentUser.followings.map(async (friendId) => {
+        const posts = await Post.find({ userId: friendId });
+        if (!posts.length) {
+          // Si no hay publicaciones para este amigo, se puede manejar aquí
+          console.log(`No posts found for friend with id ${friendId}`);
+        }
+        return posts;
       })
     );
+
+    // Verificar si friendPosts está vacío
+    const flatFriendPosts = friendPosts.flat(); // Aplanar el array de arrays
+    if (flatFriendPosts.length === 0) {
+      return res.status(404).json({ message: "No friend posts found" });
+    }
+
     res.json(userPosts.concat(...friendPosts));
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json(err); 
   }
 };
+// exports.timeline = async (req, res) => {
+//   try {
+//     const currentUser = await User.findById(req.params.userId);
+//     console.log(req.params.userId)
+    
+//     const userPosts = await Post.find({ userId: currentUser._id });
+//     const friendPosts = await Promise.all(
+      
+//       currentUser.followings.map((friendId) => {
+//         return Post.find({ userId: friendId });
+//       })
+//     );
+//     if(friendPosts){
+
+//     }
+//     res.json(userPosts.concat(...friendPosts));
+//   } catch (err) {
+//     res.status(500).json(err); 
+//   }
+// };
 
 //get timeline posts
 exports.findusername = async (req, res) => {

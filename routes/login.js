@@ -23,9 +23,13 @@ router.get(
 
 router.get("/google/success", isLoggedIn, (req, res) => {
   const token = jwtUtils.createToken(req.user);
-  res.redirect(`http://localhost:3000/dashboard?token=${token}`);
+  // const username = req.user.displayName;
+  const username = req.user.username;
+  
+  res.redirect(`http://localhost:3000/home?token=${token}&username=${username}`);
 });
 
+// res.redirect(`http://localhost:3000/dashboard?token=${token}`);
 router.get("/logout", (req, res) => {
   req.logout();
   req.session.destroy();

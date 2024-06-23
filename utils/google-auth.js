@@ -19,9 +19,11 @@ passport.use(
           username: profile.displayName,
           email: profile.email,
           profilePicture: profile.picture,
+        },
+        (err, user) => {
+          return done(err, user);
         }
       );
-      return done(null, profile);
     }
   )
 );
