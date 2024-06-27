@@ -49,6 +49,44 @@ exports.deleteUser = async (req, res) => {
 //     res.status(500).json(err);
 //   }
 // };
+exports.getFollow = async (req, res) => {
+  const userId=req.params._id ;
+  
+  try {
+    console.log("User ID:", userId);
+    const user = await User.findById(userId)
+    if (!user) {
+      
+      return res.status(404).json("User not found");
+    }
+
+    console.log("User found:", user);
+    const follows = await Promise.all(
+      user.followings.map(async (followings) => {
+        return User.findById(followings._id)
+
+        
+      })
+    );
+    let friendList=[];
+    follows.forEach((friend) => {
+      if (friend) {
+        const { _id, username, profilePicture } = friend;
+        friendList.push({ _id, username, profilePicture });
+      }
+    });
+    console.log("Friend list:", friendList);
+    // follows.map((friend)=>{
+    //   const{_id, username, profilePicture}= friend
+    //   friendList.push({_id, username, profilePicture});
+    // });
+    res.status(200).json(friendList);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+//amigos
 exports.getUser = async (req, res) => {
   const userId=req.query.userId ;
   const username=req.query.username;
@@ -62,7 +100,6 @@ exports.getUser = async (req, res) => {
     res.status(500).json(err);
   }
 };
-
 //follow a user
 exports.followUser = async (req, res) => {
   if (req.body.userId !== req.params.id) {
