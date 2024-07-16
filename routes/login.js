@@ -8,6 +8,7 @@ function isLoggedIn(req, res, next) {
   req.user ? next() : res.sendStatus(401);
 }
 
+
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
