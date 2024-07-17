@@ -8,7 +8,6 @@ function isLoggedIn(req, res, next) {
   req.user ? next() : res.sendStatus(401);
 }
 
-
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
@@ -26,8 +25,10 @@ router.get("/google/success", isLoggedIn, (req, res) => {
   const token = jwtUtils.createToken(req.user);
   // const username = req.user.displayName;
   const username = req.user.username;
-  
-  res.redirect(`http://localhost:3000/home?token=${token}&username=${username}`);
+
+  res.redirect(
+    `http://localhost:3000/home?token=${token}&username=${username}`
+  );
 });
 
 // res.redirect(`http://localhost:3000/dashboard?token=${token}`);
