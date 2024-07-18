@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { upload } = require("../utils/UploadFile");
 const {
   createPost,
   deletePost,
@@ -8,7 +9,8 @@ const {
   updatePost,findusername,
 } = require("../controllers/posts-controller");
 
-router.post("/",createPost);
+
+router.post("/",upload.single("img"),createPost);
 router.put("/:id",updatePost);
 router.delete("/:id",deletePost);
 router.put("/:id/like",likePost);
