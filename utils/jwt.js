@@ -7,7 +7,7 @@ const secret = process.env.SECRET;
 
 const createToken = (user) => {
   const payload = {
-    id: user.id,
+    id: user.googleId,
     name: user.username,
     email: user.email,
     profilePicture: user.profilePicture,
