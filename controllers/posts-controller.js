@@ -127,6 +127,28 @@ exports.timeline = async (req, res) => {
 //   }
 // };
 
+
+
+
+//funcion de push de comentario
+
+exports.commentOnPost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (post) {
+      const comment = req.body.text; 
+      post.comments.push(comment); 
+      await post.save();
+      res.status(200).json(post); 
+    } else {
+      res.status(404).json({ message: "Post not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
 //get timeline posts
 exports.findusername = async (req, res) => {
   try {
