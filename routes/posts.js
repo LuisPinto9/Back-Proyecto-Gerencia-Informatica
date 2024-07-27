@@ -9,8 +9,10 @@ const {
   updatePost,
   findusername,
   commentOnPost,
+  getAllPosts,
 } = require("../controllers/posts-controller");
 
+router.get("/allPosts", getAllPosts);
 router.post("/", upload.single("img"), createPost);
 router.put("/:id", updatePost);
 router.delete("/:id", deletePost);
