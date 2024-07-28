@@ -53,13 +53,11 @@ exports.getFollow = async (req, res) => {
   const userId = req.params._id;
 
   try {
-    console.log("User ID:", userId);
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json("User not found");
     }
 
-    console.log("User found:", user);
     const follows = await Promise.all(
       user.followings.map(async (followings) => {
         return User.findById(followings._id);
@@ -72,7 +70,6 @@ exports.getFollow = async (req, res) => {
         friendList.push({ _id, username, profilePicture });
       }
     });
-    console.log("Friend list:", friendList);
     // follows.map((friend)=>{
     //   const{_id, username, profilePicture}= friend
     //   friendList.push({_id, username, profilePicture});
@@ -103,7 +100,7 @@ exports.followUser = async (req, res) => {
       const user = await User.findById(req.params.id);
       const currentUser = await User.findById(req.body.userId);
       if (
-        !user.followers.some((follower) => follower._id.equals(req.body.userId))
+        !user.followers.some((follower) => follower._id === req.body.userId)
       ) {
         await user.updateOne({
           $push: { followers: { _id: req.body.userId } },
@@ -128,9 +125,7 @@ exports.unfollowUser = async (req, res) => {
     try {
       const user = await User.findById(req.params.id);
       const currentUser = await User.findById(req.body.userId);
-      if (
-        user.followers.some((follower) => follower._id.equals(req.body.userId))
-      ) {
+      if (user.followers.some((follower) => follower._id === req.body.userId)) {
         await user.updateOne({
           $pull: { followers: { _id: req.body.userId } },
         });

@@ -51,7 +51,6 @@ exports.deletePost = async (req, res) => {
 exports.likePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    console.log(post)
     if (!post.likes.includes(req.body.userId)) {
       await post.updateOne({ $push: { likes: req.body.userId } });
       res.status(200).json("The post has been liked");
