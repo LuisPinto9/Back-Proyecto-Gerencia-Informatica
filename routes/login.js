@@ -3,6 +3,7 @@ const passport = require("passport");
 const jwtUtils = require("../utils/jwt");
 
 require("../utils/google-auth");
+require("dotenv").config();
 
 function isLoggedIn(req, res, next) {
   req.user ? next() : res.sendStatus(401);
