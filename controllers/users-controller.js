@@ -37,7 +37,8 @@ exports.getFollow = async (req, res) => {
         friendList.push({ _id, username, profilePicture });
       }
     });
-    // follows.map((friend)=>{
+
+     // follows.map((friend)=>{
     //   const{_id, username, profilePicture}= friend
     //   friendList.push({_id, username, profilePicture});
     // });
@@ -142,6 +143,7 @@ exports.uploadFileToGCS = async (req, res) => {
 
   blobStream.end(req.file.buffer);
 };
+
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
   const updateInformation = req.body;
@@ -151,6 +153,16 @@ exports.updateUser = async (req, res) => {
     res.status(200).json({ state: true, data: data });
   } catch (err) {
     res.status(500).json({ state: false, error: err.message });
+  }
+};
+
+exports.searchUsers = async (req, res) => {
+  const query = req.query.username;
+  try {
+    const users = await User.find({ username: new RegExp(query, 'i') }).limit(10);
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
   }
 };
 

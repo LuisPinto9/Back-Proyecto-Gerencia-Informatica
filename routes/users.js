@@ -8,6 +8,7 @@ const {
   updateUser,
   getFollow,
   uploadFileToGCS,
+  searchUsers,
 } = require("../controllers/users-controller");
 
 router.patch("/:id", updateUser);
@@ -18,6 +19,7 @@ router.get("/", getUser);
 router.put("/:id/follow", followUser);
 router.put("/:id/unfollow", unfollowUser);
 router.post("/upload", upload.single("file"), uploadFileToGCS);
+router.get("/search", searchUsers);  // Nueva ruta para la búsqueda de usuarios
 
 router.patch('/update/:id',updateUser);
 
