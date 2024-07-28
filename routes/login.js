@@ -27,11 +27,10 @@ router.get("/google/success", isLoggedIn, (req, res) => {
   const username = req.user.username;
 
   res.redirect(
-    `http://localhost:3000/home?token=${token}&username=${username}`
+    `${process.env.URI_FRONT}/home?token=${token}&username=${username}`
   );
 });
 
-// res.redirect(`http://localhost:3000/dashboard?token=${token}`);
 router.get("/logout", (req, res) => {
   req.logout();
   req.session.destroy();
@@ -39,7 +38,7 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/google/failure", (req, res) => {
-  res.redirect("http://localhost:3000/");
+  res.redirect(`${process.env.URI_FRONT}/`);
 });
 
 module.exports = router;
