@@ -16,6 +16,7 @@ exports.deleteUser = async (req, res) => {
 };
 
 
+//a los que sigo
 exports.getFollow = async (req, res) => {
   const userId = req.params._id;
 
@@ -37,17 +38,40 @@ exports.getFollow = async (req, res) => {
         friendList.push({ _id, username, profilePicture });
       }
     });
-
-     // follows.map((friend)=>{
-    //   const{_id, username, profilePicture}= friend
-    //   friendList.push({_id, username, profilePicture});
-    // });
+    
     res.status(200).json(friendList);
   } catch (err) {
     res.status(500).json(err);
   }
 };
+//los que me sigue
+exports.getFollowers = async (req, res) => {
+  const userId = req.params._id;
 
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json("User not found");
+    }
+
+    const followers = await Promise.all(
+      user.followers.map(async (followers) => {
+        return User.findById(followers._id);
+      })
+    );
+    let followersList = [];
+    followers.forEach((friend) => {
+      if (friend) {
+        const { _id, username, profilePicture } = friend;
+        followersList.push({ _id, username, profilePicture });
+      }
+    });
+    
+    res.status(200).json(followersList);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
 exports.getUser = async (req, res) => {
   const userId = req.query.userId;
   const username = req.query.username;
