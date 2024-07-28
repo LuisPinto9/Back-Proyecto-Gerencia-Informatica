@@ -19,4 +19,8 @@ router.put("/:id/follow", followUser);
 router.put("/:id/unfollow", unfollowUser);
 router.post("/upload", upload.single("file"), uploadFileToGCS);
 
+router.patch('/update/:id',updateUser);
+
+
+
 module.exports = router;

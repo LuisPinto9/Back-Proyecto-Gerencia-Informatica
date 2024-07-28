@@ -1,31 +1,7 @@
 const User = require("../models/user-model");
 const bcrypt = require("bcrypt");
 
-//update user
-exports.updateUser = async (req, res) => {
-  if (req.body.userId === req.params.id || req.body.isAdmin) {
-    if (req.body.password) {
-      try {
-        const salt = await bcrypt.genSalt(10);
-        req.body.password = await bcrypt.hash(req.body.password, salt);
-      } catch (err) {
-        return res.status(500).json(err);
-      }
-    }
-    try {
-      const user = await User.findByIdAndUpdate(req.params.id, {
-        $set: req.body,
-      });
-      res.status(200).json("Account has been updated");
-    } catch (err) {
-      return res.status(500).json(err);
-    }
-  } else {
-    return res.status(403).json("You can update only your account!");
-  }
-};
 
-//delete user
 exports.deleteUser = async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
     try {
@@ -39,16 +15,7 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-//get a user
-// exports.getUser = async (req, res) => {
-//   try {
-//     const user = await User.findById(req.params.id);
-//     const { password, updatedAt, ...other } = user._doc;
-//     res.status(200).json(other);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// };
+
 exports.getFollow = async (req, res) => {
   const userId = req.params._id;
 
@@ -180,3 +147,34 @@ exports.uploadFileToGCS = async (req, res) => {
 
   blobStream.end(req.file.buffer);
 };
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
+  const updateInformation = req.body;
+
+  try {
+    const data = await User.updateOne({ _id: id }, { $set: updateInformation });
+    res.status(200).json({ state: true, data: data });
+  } catch (err) {
+    res.status(500).json({ state: false, error: err.message });
+  }
+};
+
+//   const { id } = req.params;
+//   const { username, email, phone } = req.body;
+//   try {
+//     const user = await User.findById(id);
+//     if (!user) {
+//       return res.status(404).json({ success: false, message: "User not found" });
+//     }
+
+//     user.username = username;
+//     user.email = email;
+//     user.phone = phone;
+
+//     await user.save();
+
+//     res.status(200).json({ success: true, data: user });
+//   } catch (err) {
+//     res.status(500).json({ success: false, error: err.message });
+//   }
+// };
