@@ -58,6 +58,18 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    interests: {
+      type: String,
+      default: "",
+    },
+    workExperience: {
+      type: String,
+      default: "",
+    },
+    skills: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
