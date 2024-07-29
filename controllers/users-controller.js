@@ -173,8 +173,9 @@ exports.updateUser = async (req, res) => {
   const updateInformation = req.body;
 
   try {
-    const data = await User.updateOne({ _id: id }, { $set: updateInformation });
-    res.status(200).json({ state: true, data: data });
+    await User.updateOne({ _id: id }, { $set: updateInformation });
+    const updatedUser = await User.findById(id);
+    res.status(200).json({ state: true, data: updatedUser });
   } catch (err) {
     res.status(500).json({ state: false, error: err.message });
   }
@@ -190,22 +191,4 @@ exports.searchUsers = async (req, res) => {
   }
 };
 
-//   const { id } = req.params;
-//   const { username, email, phone } = req.body;
-//   try {
-//     const user = await User.findById(id);
-//     if (!user) {
-//       return res.status(404).json({ success: false, message: "User not found" });
-//     }
 
-//     user.username = username;
-//     user.email = email;
-//     user.phone = phone;
-
-//     await user.save();
-
-//     res.status(200).json({ success: true, data: user });
-//   } catch (err) {
-//     res.status(500).json({ success: false, error: err.message });
-//   }
-// };
